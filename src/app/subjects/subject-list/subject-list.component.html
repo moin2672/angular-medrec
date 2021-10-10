@@ -1,0 +1,17 @@
+
+
+<div class="row">
+<div class="col-md-6" >
+
+<div class="list-group" >
+  <a class="list-group-item list-group-item-action text-white bg-primary ">FOLLOW UP PATIENTS</a>
+<a *ngFor="let f of followUp" [href]="f.id" class="list-group-item list-group-item-action" ><i class="fa fa-user fa-2x" style="color:#ff9800;"></i>&nbsp;&nbsp;{{f.subjectID}}</a>
+</div>
+</div>
+<div class="col-md-6" >
+<div class="list-group">
+  <a class="list-group-item list-group-item-action text-white bg-primary ">NON-FOLLOW UP PATIENTS</a>
+<a  *ngFor="let n of nonFollowUp" [href]="n.id"  class="list-group-item list-group-item-action"><i class="fa fa-user fa-2x" style="color:#8bc34a;"></i>&nbsp;&nbsp;{{n.subjectID}}</a>
+</div>
+</div>
+</div>

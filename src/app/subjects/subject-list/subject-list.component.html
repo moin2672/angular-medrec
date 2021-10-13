@@ -1,16 +1,18 @@
 <div class="index">
-  <table class="table table-hover">
+  <table class="table table-hover" *ngIf="pdata.length > 0">
     <thead>
       <tr class="table-success">
-        <th scope="col">Patient ID</th>
+        <!-- <th scope="col">Patient ID</th>
         <th scope="col">Patient Name</th>
         <th scope="col">No. of Visits</th>
-        <th scope="col">Last Visit</th>
+        <th scope="col">Last Visit</th> -->
+        <th scope="col">Subject Aadhar</th>  
+        <th scope="col">Subject Name</th>
       </tr>
     </thead>
     <tbody *ngFor="let pd of pdata">
       <tr class="pointer">
-        <th scope="row">{{ pd.subjectID }}</th>
+        <!-- <th scope="row">{{ pd.subjectID }}</th>
         <td>{{ pd.subjectName }}</td>
         <td>
           <i
@@ -25,8 +27,14 @@
         </td>
         <td>
           {{ pd.subjectVisits[pd.subjectVisits.length - 1].sv_visitedOn }}
-        </td>
+        </td> -->
+        <td>{{ pd.subjectAadhar }}</td>
+        <td>{{ pd.subjectName }}</td>
       </tr>
     </tbody>
   </table>
+
+  <h4 style="text-align:center" *ngIf="pdata.length <= 0">
+    No Subjects Enrolled
+  </h4>
 </div>

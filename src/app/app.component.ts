@@ -6,5 +6,8 @@ import { Component, VERSION } from '@angular/core';
   styleUrls: [ './app.component.css' ]
 })
 export class AppComponent  {
-  name = 'MEDREC ';
+  storedSubjects=[];
+  onSubejctsAdded(subject){
+    this.storedSubjects.push(subject);
+  }
 }

@@ -1,3 +1,13 @@
-<p>
-subject-create works!
-</p>
+<form action="">
+  <div class="form-group">
+    <label for="subjectAadhar">Subject Aadhar</label>
+    <input type="email" class="form-control" id="subjectAadhar" placeholder="Enter Subject Aadhar" [(ngModel)]="subjectAadhar" name="subjectAadhar">
+    <small class="form-text text-muted">We'll never share your email with anyone else.</small>
+  </div>
+  <div class="form-group">
+    <label for="subjectName">Subject Name</label>
+    <input type="email" class="form-control" id="subjectName" placeholder="Enter Subject Name" [(ngModel)]="subjectName" name="subjectName">
+    <small class="form-text text-muted">We'll never share your email with anyone else.</small>
+  </div>
+  <button class="btn btn-success" (click)="onAddSubject()">Save</button>
+</form>

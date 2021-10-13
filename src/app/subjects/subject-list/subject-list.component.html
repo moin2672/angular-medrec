@@ -6,8 +6,10 @@
         <th scope="col">Patient Name</th>
         <th scope="col">No. of Visits</th>
         <th scope="col">Last Visit</th> -->
-        <th scope="col">Subject Aadhar</th>  
+        <th scope="col"></th>
+        <th scope="col">Subject Aadhar</th>
         <th scope="col">Subject Name</th>
+        <th scope="col"></th>
       </tr>
     </thead>
     <tbody *ngFor="let pd of pdata">
@@ -28,8 +30,10 @@
         <td>
           {{ pd.subjectVisits[pd.subjectVisits.length - 1].sv_visitedOn }}
         </td> -->
+        <td><button class="btn btn-primary">Edit</button></td>
         <td>{{ pd.subjectAadhar }}</td>
         <td>{{ pd.subjectName }}</td>
+        <td><button class="btn btn-danger">Delete</button></td>
       </tr>
     </tbody>
   </table>

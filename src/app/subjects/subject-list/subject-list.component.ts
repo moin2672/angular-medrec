@@ -176,7 +176,7 @@ export class SubjectListComponent implements OnInit, OnDestroy {
   // ]
   constructor(private subjectService: SubjectService) {}
   ngOnInit() {
-    this.pdata = this.subjectService.getSubjects();
+    this.subjectService.getSubjects();
     this.subjectSub = this.subjectService
         .getSubjectUpdateListener()
         .subscribe((subjects:Sub[])=>{this.pdata=subjects;});

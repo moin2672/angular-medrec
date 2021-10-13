@@ -19,7 +19,7 @@ export class SubjectCreateComponent implements OnInit {
     if(subjectForm.invalid){
       return;
     }
-    const subject: Sub={subjectAadhar:subjectForm.value.subjectAadhar, subjectName:subjectForm.value.subjectName}
+    const subject: Sub={id:null,subjectAadhar:subjectForm.value.subjectAadhar, subjectName:subjectForm.value.subjectName}
 this.subjectService.addSubject(subjectForm.value.subjectAadhar, subjectForm.value.subjectName)
     console.log(subject);
   }

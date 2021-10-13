@@ -30,10 +30,14 @@
         <td>
           {{ pd.subjectVisits[pd.subjectVisits.length - 1].sv_visitedOn }}
         </td> -->
-        <td><button class="btn btn-primary">Edit</button></td>
+        <td><button class="btn btn-primary" [routerLink]="['/edit', pd._id]">Edit</button></td>
         <td>{{ pd.subjectAadhar }}</td>
         <td>{{ pd.subjectName }}</td>
-        <td><button class="btn btn-danger" (click)="OnDelete(pd._id)">Delete</button></td>
+        <td>
+          <button class="btn btn-danger" (click)="OnDelete(pd._id)">
+            Delete
+          </button>
+        </td>
       </tr>
     </tbody>
   </table>

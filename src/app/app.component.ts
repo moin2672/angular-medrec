@@ -1,4 +1,5 @@
-import { Component, VERSION } from '@angular/core';
+import { Component } from '@angular/core';
+import {Sub} from './subjects/sub.model';
 
 @Component({
   selector: 'my-app',
@@ -6,8 +7,8 @@ import { Component, VERSION } from '@angular/core';
   styleUrls: [ './app.component.css' ]
 })
 export class AppComponent  {
-  storedSubjects=[];
-  onSubejctsAdded(subject){
+  storedSubjects:Sub[]=[];
+  onSubejctsAdded(subject:Sub){
     this.storedSubjects.push(subject);
   }
 }

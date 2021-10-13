@@ -52,4 +52,10 @@ export class SubjectService {
         this.subjectsUpdated.next([...this.subjects]);
       })
   }
+  deleteSubject(subjecttId:string){
+    this.httpClient.delete("http://localhost:3003/api/subjects/"+subjecttId)
+        .subscribe(()=>{
+          console.log("Deleted!");
+        });
+  }
 }

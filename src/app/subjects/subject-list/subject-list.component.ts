@@ -181,7 +181,9 @@ export class SubjectListComponent implements OnInit, OnDestroy {
         .getSubjectUpdateListener()
         .subscribe((subjects:Sub[])=>{this.pdata=subjects;});
   }
-  
+  OnDelete(subjecttId:string){
+    this.subjectService.deleteSubject(subjecttId);
+}
   ngOnDestroy(){
     this.subjectSub.unsubscribe();
   }

@@ -1,13 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { SubjectService } from '../subject.service';
+import { Subscription } from 'rxjs';
+import { Sub } from '../sub.model'; 
 
 @Component({
   selector: 'app-subject-list',
   templateUrl: './subject-list.component.html',
   styleUrls: ['./subject-list.component.css'],
 })
-export class SubjectListComponent implements OnInit {
+export class SubjectListComponent implements OnInit, OnDestroy {
   pdata = [];
+  private subjectSub: Subscription;
   //pdata = [
   //   {
   //       "id":123,
@@ -174,5 +177,12 @@ export class SubjectListComponent implements OnInit {
   constructor(private subjectService: SubjectService) {}
   ngOnInit() {
     this.pdata = this.subjectService.getSubjects();
+    this.subjectSub = this.subjectService
+        .getSubjectUpdateListener()
+        .subscribe((subjects:Sub[])=>{this.pdata=subjects;});
+  }
+  
+  ngOnDestroy(){
+    this.subjectSub.unsubscribe();
   }
 }

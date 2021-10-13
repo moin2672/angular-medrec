@@ -31,7 +31,12 @@ export class SubjectService {
       subjectAadhar: subjectAadhar,
       subjectName: subjectName,
     };
-    this.subjects.push(subject);
-    this.subjectsUpdated.next([...this.subjects]);
+    this.httpClient
+      .post<{ message: string }>('http://localhost:3003/api/subjects', subject)
+      .subscribe((responseData) => {
+        console.log(responseData.message);
+        this.subjects.push(subject);
+        this.subjectsUpdated.next([...this.subjects]);
+      });
   }
 }

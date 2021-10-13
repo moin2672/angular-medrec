@@ -1,7 +1,7 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component,  OnInit } from '@angular/core';
 import {Sub} from '../sub.model';
 import { NgForm } from '@angular/forms';
-
+import { SubjectService } from '../subject.service';
 @Component({
   selector: 'app-subject-create',
   templateUrl: './subject-create.component.html',
@@ -10,8 +10,8 @@ import { NgForm } from '@angular/forms';
 export class SubjectCreateComponent implements OnInit {
   subjectAadhar = '';
   subjectName = '';
-  @Output() subjectCreated =  new EventEmitter<Sub>();
-  constructor() {}
+
+  constructor(private subjectService: SubjectService) {}
 
   ngOnInit() {}
 
@@ -20,7 +20,7 @@ export class SubjectCreateComponent implements OnInit {
       return;
     }
     const subject: Sub={subjectAadhar:subjectForm.value.subjectAadhar, subjectName:subjectForm.value.subjectName}
-    this.subjectCreated.emit(subject);
+this.subjectService.addSubject(subjectForm.value.subjectAadhar, subjectForm.value.subjectName)
     console.log(subject);
   }
 }

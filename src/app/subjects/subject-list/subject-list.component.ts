@@ -1,4 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { SubjectService } from '../subject.service';
 
 @Component({
   selector: 'app-subject-list',
@@ -6,7 +7,7 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./subject-list.component.css'],
 })
 export class SubjectListComponent implements OnInit {
-  @Input() pdata = [];
+  pdata = [];
   //pdata = [
   //   {
   //       "id":123,
@@ -170,6 +171,8 @@ export class SubjectListComponent implements OnInit {
   //   {"id":654,"subjectID":"MEDREC 005", "isFollowUp":true},
   //   {"id":987,"subjectID":"MEDREC 006", "isFollowUp":true}
   // ]
-  constructor() {}
-  ngOnInit() {}
+  constructor(private subjectService: SubjectService) {}
+  ngOnInit() {
+    this.pdata = this.subjectService.getSubjects();
+  }
 }

@@ -1,5 +1,5 @@
-import { Component,  OnInit } from '@angular/core';
-import {Sub} from '../sub.model';
+import { Component, OnInit } from '@angular/core';
+import { Sub } from '../sub.model';
 import { NgForm } from '@angular/forms';
 import { SubjectService } from '../subject.service';
 @Component({
@@ -15,12 +15,19 @@ export class SubjectCreateComponent implements OnInit {
 
   ngOnInit() {}
 
-  onAddSubject(subjectForm: NgForm){
-    if(subjectForm.invalid){
+  onAddSubject(subjectForm: NgForm) {
+    if (subjectForm.invalid) {
       return;
     }
-    const subject: Sub={id:null,subjectAadhar:subjectForm.value.subjectAadhar, subjectName:subjectForm.value.subjectName}
-this.subjectService.addSubject(subjectForm.value.subjectAadhar, subjectForm.value.subjectName)
+    const subject: Sub = {
+      _id: null,
+      subjectAadhar: subjectForm.value.subjectAadhar,
+      subjectName: subjectForm.value.subjectName,
+    };
+    this.subjectService.addSubject(
+      subjectForm.value.subjectAadhar,
+      subjectForm.value.subjectName
+    );
     console.log(subject);
   }
 }

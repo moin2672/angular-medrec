@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Sub } from './sub.model';
 import { Subject } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable()
 export class SubjectService {
@@ -14,9 +15,19 @@ export class SubjectService {
     this.httpClient
       .get<{ message: string; subjects: Sub[] }>(
         'http://localhost:3003/api/subjects'
+      ).pipe(
+        map((subjectData) => {
+          return subjectData.subjects.map((subject) => {
+            return {
+              subjectAadhar: subject.subjectAadhar,
+              subjectName: subject.subjectName,
+              _id: subject._id, //_id
+            };
+          });
+        })
       )
-      .subscribe((postData) => {
-        this.subjects = postData.subjects;
+      .subscribe((transformedSubjects) => {
+        this.subjects = transformedSubjects;
         this.subjectsUpdated.next([...this.subjects]);
       });
   }
@@ -27,16 +38,18 @@ export class SubjectService {
 
   addSubject(subjectAadhar: string, subjectName: string) {
     const subject: Sub = {
-      id: null,
+      _id: null,
       subjectAadhar: subjectAadhar,
       subjectName: subjectName,
     };
     this.httpClient
-      .post<{ message: string }>('http://localhost:3003/api/subjects', subject)
-      .subscribe((responseData) => {
+      .post<{ message: string; subjects: Sub[] }>(
+        'http://localhost:3003/api/subjects',
+        subject
+      ).subscribe((responseData)=>{
         console.log(responseData.message);
         this.subjects.push(subject);
         this.subjectsUpdated.next([...this.subjects]);
-      });
+      })
   }
 }

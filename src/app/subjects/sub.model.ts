@@ -1,5 +1,5 @@
 export interface Sub {
-  id: string;
+  _id: string;
   subjectAadhar: string;
   subjectName: string;
 }

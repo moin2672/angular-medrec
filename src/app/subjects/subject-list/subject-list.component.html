@@ -30,7 +30,11 @@
         <td>
           {{ pd.subjectVisits[pd.subjectVisits.length - 1].sv_visitedOn }}
         </td> -->
-        <td><button class="btn btn-primary" [routerLink]="['/edit', pd._id]">Edit</button></td>
+        <td>
+          <button class="btn btn-primary" [routerLink]="['/edit', pd._id]">
+            Edit
+          </button>
+        </td>
         <td>{{ pd.subjectAadhar }}</td>
         <td>{{ pd.subjectName }}</td>
         <td>
@@ -48,13 +52,19 @@
 </div>
 <div style="float:right">
   <ul class="pagination">
-    <li class="page-item" [ngClass]="{'active' : backward, 'disabled':!backward}">
+    <li
+      class="page-item pointer"
+      [ngClass]="{ active: backward, disabled: !backward }"
+    >
       <a class="page-link" (click)="onDecrement()">&laquo;</a>
     </li>
     <li class="page-item">
-      <a class="page-link">{{currentPage}} of {{totalPages}}</a>
+      <a class="page-link">{{ currentPage }} of {{ totalPages }}</a>
     </li>
-    <li class="page-item" [ngClass]="{'active' : forward,  'disabled':!forward}">
+    <li
+      class="page-item pointer"
+      [ngClass]="{ active: forward, disabled: !forward }"
+    >
       <a class="page-link" (click)="onIncrement()">&raquo;</a>
     </li>
   </ul>

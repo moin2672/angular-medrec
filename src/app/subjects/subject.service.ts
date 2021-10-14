@@ -8,30 +8,42 @@ import { Router } from '@angular/router';
 @Injectable()
 export class SubjectService {
   private subjects: Sub[] = [];
-  private subjectsUpdated = new Subject<Sub[]>();
+  private subjectsUpdated = new Subject<{subjects:Sub[],subjectCount:number}>();
 
   constructor(private httpClient: HttpClient, private router: Router) {}
 
-  getSubjects() {
+  getSubjects(postsPerPage:number, currentPage: number) {
+    const queryParams=`?pagesize=${postsPerPage}&currentpage=${currentPage}`;
+    console.log(queryParams)
     this.httpClient
-      .get<{ message: string; subjects: Sub[] }>(
-        'http://localhost:3003/api/subjects'
+      .get<{ message: string; subjects: Sub[], maxSubjects:number }>(
+        'http://localhost:3003/api/subjects'+queryParams
       )
       .pipe(
         map((subjectData) => {
-          return subjectData.subjects.map((subject) => {
-            return {
-              subjectAadhar: subject.subjectAadhar,
-              subjectName: subject.subjectName,
-              _id: subject._id, //_id
-            };
-          });
+          return { 
+            subjects: subjectData.subjects.map(subject => {
+              return {
+                subjectAadhar:subject.subjectAadhar,
+                subjectName:subject.subjectName,
+                _id:subject._id
+              };
+            }),
+            maxSubjects:subjectData.maxSubjects
+          };
         })
       )
-      .subscribe((transformedSubjects) => {
-        this.subjects = transformedSubjects;
-        this.subjectsUpdated.next([...this.subjects]);
-      });
+      .subscribe(transformedSubjectData=>{
+        this.subjects=transformedSubjectData.subjects;
+        console.log({
+          subjects:[...this.subjects],
+          subjectCount: transformedSubjectData.maxSubjects
+        })
+        this.subjectsUpdated.next({
+                                subjects:[...this.subjects],
+                                subjectCount: transformedSubjectData.maxSubjects
+                              });
+      })
   }
 
   getSubjectUpdateListener() {
@@ -50,14 +62,14 @@ export class SubjectService {
         subject
       )
       .subscribe((responseData) => {
-        console.log(responseData);
-        const subject : Sub ={
-          _id:responseData.subject._id, 
-          subjectAadhar:subjectAadhar, 
-          subjectName:subjectName
-        }
-        this.subjects.push(subject);
-        this.subjectsUpdated.next([...this.subjects]);
+        // console.log(responseData);
+        // const subject : Sub ={
+        //   _id:responseData.subject._id, 
+        //   subjectAadhar:subjectAadhar, 
+        //   subjectName:subjectName
+        // }
+        // this.subjects.push(subject);
+        // this.subjectsUpdated.next([...this.subjects]);
         this.router.navigate(['/']);
       });
   }
@@ -82,27 +94,27 @@ export class SubjectService {
       .put('http://localhost:3003/api/subjects/' + _id, subject)
       .subscribe((response) => {
         // console.log(response)
-        const updatedSubjects = [...this.subjects];
-        const oldPostIndex = updatedSubjects.findIndex(
-          (p) => p._id === subject._id
-        );
-        updatedSubjects[oldPostIndex] = subject;
-        this.subjects = updatedSubjects;
-        this.subjectsUpdated.next([...this.subjects]);
+        // const updatedSubjects = [...this.subjects];
+        // const oldPostIndex = updatedSubjects.findIndex(
+        //   (p) => p._id === subject._id
+        // );
+        // updatedSubjects[oldPostIndex] = subject;
+        // this.subjects = updatedSubjects;
+        // this.subjectsUpdated.next([...this.subjects]);
         this.router.navigate(['/']);
       });
   }
 
   deleteSubject(subjecttId: string) {
-    this.httpClient
+    return this.httpClient
       .delete('http://localhost:3003/api/subjects/' + subjecttId)
-      .subscribe(() => {
-        const updatedSubjects = this.subjects.filter(
-          (subject) => subject._id != subjecttId
-        );
-        this.subjects = updatedSubjects;
-        this.subjectsUpdated.next([...this.subjects]);
-        console.log('Deleted!');
-      });
+      // .subscribe(() => {
+      //   const updatedSubjects = this.subjects.filter(
+      //     (subject) => subject._id != subjecttId
+      //   );
+      //   this.subjects = updatedSubjects;
+      //   this.subjectsUpdated.next([...this.subjects]);
+      //   console.log('Deleted!');
+      // });
   }
 }

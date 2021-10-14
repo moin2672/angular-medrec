@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { SubjectService } from '../subject.service';
 import { Subscription } from 'rxjs';
-import { Sub } from '../sub.model'; 
+import { Sub } from '../sub.model';
 
 @Component({
   selector: 'app-subject-list',
@@ -17,8 +17,8 @@ export class SubjectListComponent implements OnInit, OnDestroy {
   pageSizeOptions = [10, 15, 20];
 
   /* checking the new pagination */
-
-  totalPages = Math.ceil(this.totalPosts / this.postsPerPage);
+  totalPages = 0;
+  // totalPages = Math.ceil(this.totalPosts / this.postsPerPage);
   forward = false;
   backward = false;
   //pdata = [
@@ -188,18 +188,23 @@ export class SubjectListComponent implements OnInit, OnDestroy {
   onIncrement() {
     if (this.currentPage < this.totalPages) {
       this.currentPage = this.currentPage + 1;
-      // this.postsService.getPosts(this.postsPerPage, this.currentPage);
+      this.subjectService.getSubjects(this.postsPerPage, this.currentPage);
       this.updatePagination();
     }
   }
   onDecrement() {
     if (this.currentPage > 1) {
       this.currentPage = this.currentPage - 1;
-      // this.postsService.getPosts(this.postsPerPage, this.currentPage);
+      this.subjectService.getSubjects(this.postsPerPage, this.currentPage);
       this.updatePagination();
     }
   }
   updatePagination() {
+    this.totalPages = Math.ceil(this.totalPosts / this.postsPerPage);
+    console.log('currentpage=', this.currentPage);
+    console.log('totalPages=', this.totalPages);
+    console.log('totalPosts=', this.totalPosts);
+    console.log(Math.ceil(this.totalPosts / this.postsPerPage));
     if (this.currentPage <= 1) {
       if (this.totalPages <= 1) {
         // this.hide = true;
@@ -222,15 +227,22 @@ export class SubjectListComponent implements OnInit, OnDestroy {
     }
   }
   ngOnInit() {
-    this.subjectService.getSubjects();
+    this.subjectService.getSubjects(this.postsPerPage, this.currentPage);
     this.subjectSub = this.subjectService
-        .getSubjectUpdateListener()
-        .subscribe((subjects:Sub[])=>{this.pdata=subjects;});
+      .getSubjectUpdateListener()
+      .subscribe((subjectData: { subjects: Sub[]; subjectCount: number }) => {
+        this.pdata = subjectData.subjects;
+        this.totalPosts = subjectData.subjectCount;
+        this.updatePagination();
+        console.log(subjectData);
+      });
   }
-  OnDelete(subjecttId:string){
-    this.subjectService.deleteSubject(subjecttId);
-}
-  ngOnDestroy(){
+  OnDelete(subjectId: string) {
+    this.subjectService.deleteSubject(subjectId).subscribe(() => {
+      this.subjectService.getSubjects(this.postsPerPage, this.currentPage);
+    });
+  }
+  ngOnDestroy() {
     this.subjectSub.unsubscribe();
   }
 }

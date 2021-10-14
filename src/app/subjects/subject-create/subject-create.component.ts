@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Sub } from '../sub.model';
-import { NgForm } from '@angular/forms';
+import { EmailValidator, FormControl, FormGroup, RequiredValidator, Validators } from '@angular/forms';
 import { SubjectService } from '../subject.service';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 
@@ -16,10 +16,18 @@ export class SubjectCreateComponent implements OnInit {
 
   editMode = false;
   private subjectId:string;
+  form:FormGroup;
 
   constructor(private subjectService: SubjectService,public activatedRoute: ActivatedRoute) {}
 
   ngOnInit() {
+
+    this.form=new FormGroup({
+      subjectAadhar:new FormControl(null, {validators:[Validators.required, Validators.minLength(3)]}),
+      subjectName:new FormControl(null, {validators:[Validators.required]})
+    })
+
+
     this.activatedRoute.paramMap.subscribe((paramMap: ParamMap)=>{
       if(paramMap.has('subjectId')){
         this.editMode=true;
@@ -27,8 +35,16 @@ export class SubjectCreateComponent implements OnInit {
         this.subjectService.getSubject(this.subjectId)
             .subscribe(subjectData=>{
               console.log(subjectData);
-              const transformedSubjectData: Sub={_id:subjectData._id,             subjectAadhar:subjectData.subjectAadhar, subjectName:subjectData.subjectName}
+              const transformedSubjectData: Sub={
+                _id:subjectData._id, 
+                subjectAadhar:subjectData.subjectAadhar, 
+                subjectName:subjectData.subjectName
+              }
               this.subject=transformedSubjectData;
+              this.form.setValue({
+                subjectAadhar:this.subject.subjectAadhar, 
+                subjectName:this.subject.subjectName
+              })
               console.log(this.subject)
             });
       } else {
@@ -38,16 +54,16 @@ export class SubjectCreateComponent implements OnInit {
     });
   }
 
-  onSaveSubject(subjectForm: NgForm) {
-    if (subjectForm.invalid) {
+  onSaveSubject() {
+    if (this.form.invalid) {
       return;
     }
     if(!this.editMode){
-      this.subjectService.addSubject(subjectForm.value.subjectAadhar, subjectForm.value.subjectName);
+      this.subjectService.addSubject(this.form.value.subjectAadhar, this.form.value.subjectName);
     } else {
-      this.subjectService.updateSubject(this.subjectId, subjectForm.value.subjectAadhar, subjectForm.value.subjectName);
+      this.subjectService.updateSubject(this.subjectId, this.form.value.subjectAadhar, this.form.value.subjectName);
     }
-    subjectForm.resetForm();
+    this.form.reset();
 
     // const subject: Sub = {
     //   _id: null,

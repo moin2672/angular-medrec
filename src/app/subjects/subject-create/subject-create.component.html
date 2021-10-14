@@ -1,4 +1,4 @@
-<form (submit)="onSaveSubject(subjectForm)" #subjectForm="ngForm">
+<form (submit)="onSaveSubject()" [formGroup]="form">
   <div class="form-group">
     <label for="subjectAadhar">Subject Aadhar</label>
     <input
@@ -7,12 +7,12 @@
       id="subjectAadhar"
       placeholder="Enter Subject Aadhar"
       name="subjectAadhar"
-      [ngModel]="subject?.subjectAadhar"
-      required
-      #subjectAadhar="ngModel"
+      formControlName="subjectAadhar"
     />
-    <small class="form-text text-muted"
-      >We'll never share your email with anyone else.</small
+    <small
+      class="form-text text-muted"
+      *ngIf="form.get('subjectAadhar').invalid"
+      >Subject Aadhar is required</small
     >
   </div>
   <div class="form-group">
@@ -23,13 +23,13 @@
       id="subjectName"
       placeholder="Enter Subject Name"
       name="subjectName"
-      [ngModel]="subject?.subjectName"
-      required
-      #subjectName="ngModel"
+      formControlName="subjectName"
     />
-    <small class="form-text text-muted"
-      >We'll never share your email with anyone else.</small
+    <small class="form-text text-muted" *ngIf="form.get('subjectName').invalid"
+      >Subjet Name is required.</small
     >
   </div>
-  <button class="btn btn-success" type="submit">{{editMode? 'Update' : 'Add'}} Subject</button>
+  <button class="btn btn-success" type="submit">
+    {{ editMode ? 'Update' : 'Add' }} Subject
+  </button>
 </form>

@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
 
@@ -12,7 +12,7 @@ import { SubjectCreateComponent } from './subjects/subject-create/subject-create
 import { SubjectService } from './subjects/subject.service';
 
 @NgModule({
-  imports: [BrowserModule, HttpClientModule, FormsModule,AppRoutingModule],
+  imports: [BrowserModule, HttpClientModule, FormsModule,ReactiveFormsModule,AppRoutingModule],
   declarations: [
     AppComponent,
     HeaderComponent,

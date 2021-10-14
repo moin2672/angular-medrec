@@ -45,14 +45,17 @@ export class SubjectService {
       subjectName: subjectName,
     };
     this.httpClient
-      .post<{ message: string; subjectId: string }>(
+      .post<{ message: string; subject: Sub }>(
         'http://localhost:3003/api/subjects',
         subject
       )
       .subscribe((responseData) => {
         console.log(responseData);
-        const id = responseData.subjectId;
-        subject._id = id;
+        const subject : Sub ={
+          _id:responseData.subject._id, 
+          subjectAadhar:subjectAadhar, 
+          subjectName:subjectName
+        }
         this.subjects.push(subject);
         this.subjectsUpdated.next([...this.subjects]);
         this.router.navigate(['/']);

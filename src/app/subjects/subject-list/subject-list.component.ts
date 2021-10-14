@@ -11,6 +11,16 @@ import { Sub } from '../sub.model';
 export class SubjectListComponent implements OnInit, OnDestroy {
   pdata = [];
   private subjectSub: Subscription;
+  totalPosts = 0; //total no of posts
+  postsPerPage = 10; //current page
+  currentPage = 1;
+  pageSizeOptions = [10, 15, 20];
+
+  /* checking the new pagination */
+
+  totalPages = Math.ceil(this.totalPosts / this.postsPerPage);
+  forward = false;
+  backward = false;
   //pdata = [
   //   {
   //       "id":123,
@@ -175,6 +185,42 @@ export class SubjectListComponent implements OnInit, OnDestroy {
   //   {"id":987,"subjectID":"MEDREC 006", "isFollowUp":true}
   // ]
   constructor(private subjectService: SubjectService) {}
+  onIncrement() {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage = this.currentPage + 1;
+      // this.postsService.getPosts(this.postsPerPage, this.currentPage);
+      this.updatePagination();
+    }
+  }
+  onDecrement() {
+    if (this.currentPage > 1) {
+      this.currentPage = this.currentPage - 1;
+      // this.postsService.getPosts(this.postsPerPage, this.currentPage);
+      this.updatePagination();
+    }
+  }
+  updatePagination() {
+    if (this.currentPage <= 1) {
+      if (this.totalPages <= 1) {
+        // this.hide = true;
+      } else {
+        // this.hide = false;
+        if (this.currentPage < this.totalPages) {
+          this.forward = true;
+          this.backward = false;
+        }
+      }
+    } else {
+      if (this.currentPage < this.totalPages) {
+        this.forward = true;
+        this.backward = true;
+      }
+      if (this.currentPage == this.totalPages) {
+        this.forward = false;
+        this.backward = true;
+      }
+    }
+  }
   ngOnInit() {
     this.subjectService.getSubjects();
     this.subjectSub = this.subjectService

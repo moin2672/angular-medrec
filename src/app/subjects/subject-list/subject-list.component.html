@@ -46,3 +46,16 @@
     No Subjects Enrolled
   </h4>
 </div>
+<div style="float:right">
+  <ul class="pagination">
+    <li class="page-item" [ngClass]="{'active' : backward, 'disabled':!backward}">
+      <a class="page-link" (click)="onDecrement()">&laquo;</a>
+    </li>
+    <li class="page-item">
+      <a class="page-link">{{currentPage}} of {{totalPages}}</a>
+    </li>
+    <li class="page-item" [ngClass]="{'active' : forward,  'disabled':!forward}">
+      <a class="page-link" (click)="onIncrement()">&raquo;</a>
+    </li>
+  </ul>
+</div>

@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { SubjectService } from '../subject.service';
 import { Subscription } from 'rxjs';
 import { Sub } from '../sub.model';
+import { AuthService } from '../../auth/auth.service';
 
 @Component({
   selector: 'app-subject-list',
@@ -9,13 +10,15 @@ import { Sub } from '../sub.model';
   styleUrls: ['./subject-list.component.css'],
 })
 export class SubjectListComponent implements OnInit, OnDestroy {
+  userIsAuthenticated = false;
   pdata = [];
   private subjectSub: Subscription;
   totalPosts = 0; //total no of posts
   postsPerPage = 10; //current page
   currentPage = 1;
   pageSizeOptions = [10, 15, 20];
-
+  userId: string;
+  private authStatusSub: Subscription;
   /* checking the new pagination */
   totalPages = 0;
   // totalPages = Math.ceil(this.totalPosts / this.postsPerPage);
@@ -184,7 +187,10 @@ export class SubjectListComponent implements OnInit, OnDestroy {
   //   {"id":654,"subjectID":"MEDREC 005", "isFollowUp":true},
   //   {"id":987,"subjectID":"MEDREC 006", "isFollowUp":true}
   // ]
-  constructor(private subjectService: SubjectService) {}
+  constructor(
+    private subjectService: SubjectService,
+    private authService: AuthService
+  ) {}
   onIncrement() {
     if (this.currentPage < this.totalPages) {
       this.currentPage = this.currentPage + 1;
@@ -228,6 +234,7 @@ export class SubjectListComponent implements OnInit, OnDestroy {
   }
   ngOnInit() {
     this.subjectService.getSubjects(this.postsPerPage, this.currentPage);
+    this.userId = this.authService.getUserId();
     this.subjectSub = this.subjectService
       .getSubjectUpdateListener()
       .subscribe((subjectData: { subjects: Sub[]; subjectCount: number }) => {
@@ -236,13 +243,27 @@ export class SubjectListComponent implements OnInit, OnDestroy {
         this.updatePagination();
         console.log(subjectData);
       });
+    this.userIsAuthenticated = this.authService.getIsAuth();
+    this.authStatusSub = this.authService
+      .getAuthStatusListener()
+      .subscribe((isAuthenticated) => {
+        this.userIsAuthenticated = isAuthenticated;
+        this.userId = this.authService.getUserId();
+      });
   }
   OnDelete(subjectId: string) {
-    this.subjectService.deleteSubject(subjectId).subscribe(() => {
-      this.subjectService.getSubjects(this.postsPerPage, this.currentPage);
+    this.subjectService.deleteSubject(subjectId).subscribe({
+      next: () => {
+        this.subjectService.getSubjects(this.postsPerPage, this.currentPage);
+      },
+      error: () => {
+        console.log('loading false');
+      },
+      complete: () => console.info('complete subject deletion'),
     });
   }
   ngOnDestroy() {
     this.subjectSub.unsubscribe();
+    this.authStatusSub.unsubscribe();
   }
 }

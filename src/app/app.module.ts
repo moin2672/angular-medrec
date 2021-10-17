@@ -1,25 +1,22 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
-
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
-import { SubjectListComponent } from './subjects/subject-list/subject-list.component';
-import { SubjectCreateComponent } from './subjects/subject-create/subject-create.component';
-import { SubjectService } from './subjects/subject.service';
+import { AuthInterceptor } from './auth/auth-interceptor';
+import { ErrorInterceptor } from './error-interceptor';
+
+import { SubjectsModule } from './subjects/subjects.module';
 
 @NgModule({
-  imports: [BrowserModule, HttpClientModule, FormsModule,ReactiveFormsModule,AppRoutingModule],
-  declarations: [
-    AppComponent,
-    HeaderComponent,
-    SubjectListComponent,
-    SubjectCreateComponent,
+  imports: [BrowserModule, HttpClientModule, AppRoutingModule, SubjectsModule],
+  declarations: [AppComponent, HeaderComponent],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
   ],
-  providers: [SubjectService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -6,10 +6,10 @@
         <th scope="col">Patient Name</th>
         <th scope="col">No. of Visits</th>
         <th scope="col">Last Visit</th> -->
-        <th scope="col"></th>
+        <th scope="col" *ngIf="userIsAuthenticated"></th>
         <th scope="col">Subject Aadhar</th>
         <th scope="col">Subject Name</th>
-        <th scope="col"></th>
+        <th scope="col" *ngIf="userIsAuthenticated"></th>
       </tr>
     </thead>
     <tbody *ngFor="let pd of pdata">
@@ -30,14 +30,14 @@
         <td>
           {{ pd.subjectVisits[pd.subjectVisits.length - 1].sv_visitedOn }}
         </td> -->
-        <td>
+        <td *ngIf="userIsAuthenticated && userId == pd.creator">
           <button class="btn btn-primary" [routerLink]="['/edit', pd._id]">
             Edit
           </button>
         </td>
         <td>{{ pd.subjectAadhar }}</td>
         <td>{{ pd.subjectName }}</td>
-        <td>
+        <td *ngIf="userIsAuthenticated && userId == pd.creator">
           <button class="btn btn-danger" (click)="OnDelete(pd._id)">
             Delete
           </button>
@@ -50,7 +50,7 @@
     No Subjects Enrolled
   </h4>
 </div>
-<div style="float:right">
+<div style="float:right" *ngIf="pdata.length > 0">
   <ul class="pagination">
     <li
       class="page-item pointer"
